@@ -2,8 +2,8 @@ function S= PSD_exp(x,flag)
 Fs=100;
 dt=1/Fs;
 figure;
-window = 750;
-noverlap = 500;
+window = 500;
+noverlap = 250;
 Nomega = 2000;
 w_a = logspace(-2,2,Nomega);
 D=zeros(1,5);

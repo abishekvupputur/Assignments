@@ -23,7 +23,7 @@ title(titlep);
                 title('Aircraft Response Side Slip');
             case 2 
                 ylabel('Pitch Angle [rad]')
-                title('Aircraft Response Pitch Angle');
+                title('Aircraft Response Roll Angle');
             case 3 
                 ylabel('pb/2V')
                 title('Aircraft Response pb/2V');

@@ -8,7 +8,7 @@
 %%
 clc; clear all; close all;
 
-Flag =0; %0 for Full model and 1 for reduced!
+Flag =1; %0 for Full model and 1 for reduced!
 
 if Flag==0
     AircraftModel %Loads Full Aircraft Model.
@@ -23,22 +23,18 @@ figure;
 pzmap(sys);
 title('Pole Zero Map')
 hold on
-%%%%%%%%%%%%%%%% CONTROLLER DESIGN - Pole Placement %%%%%%%%%%%%%%%%%%%%%%%
-A2=A;
-l=find(p>-0.00001); %Find Unstable poles
-p(l)=-0.1; %Get required pole at the unstable location
-
-%   The unstable pole comes from the aircraft dynamics itself and hence can be
-%   controlled by stick input. So the first channel of B matrix is used for
-%   pole placement of the first 4 poles in the system dynamics
-
-K = place( A2(1:4,1:4), B(1:4,1), p(1:4)); %Place pole and estimate feedback gain. 
-A2(1:4,1:4) = A2(1:4,1:4)-B(1:4,1)*K; %Place poles
-C = eye(size(A,2));
-D = zeros(size(A,2),size(B,2));
-sys2 = ss(A2,B,C,D);
+%%%%%%%%%%%%%%%% CONTROLLER DESIGN  %%%%%%%%%%%%%%%%%%%%%%%
+% FOR EFFECT OF K_phi ON AIRCRAFT RESPONSES, ONE OTHER K_phi IS USED
+Kphi = -0.1;
+K      = zeros(1,size(A,2)); K(1,2) = Kphi;
+A2   = A-B(:,1)*K;
+% SHOW EIGENVALUES OF THIS CONTROLLED SYSTEM
+%eig(A2), pause
+C=eye(size(A,2));
+D=zeros(size(A,2),size(B,2));
+sys2=ss(A2,B,C,D);
 pzmap(sys2);
-    legend('Original System','After Pole Placement');
+    legend('Original System','Controller added');
     grid on
     hold off;
     
@@ -46,7 +42,7 @@ pzmap(sys2);
 % TIME AXIS INPUT VECTOR DEFINITION
 dt = 0.01;
 T  = 150-dt; t = [0:dt:T]; N = length(t);
-rng('shuffle'); %Generates randn sequence based on time
+%rng('shuffle'); %Generates randn sequence based on time
 % INPUT VECTOR DEFINITION
 nn = zeros(1,N);             % zero input elevator
 w2 = randn(1,N)/sqrt(dt);    % scaled input lateral turbulence,
@@ -101,7 +97,7 @@ freq = [0 : df : 2*pi*Fs/2];
 
 %% Variances
 disp('Variance Estimated is as follows');
-Names_of_States = {'Side Slip' ;'Roll Rate' ; 'pb/2V' ; 'rb/2v' ; 'Lateral Acceleration'};
+Names_of_States = {'Side Slip' ;'Roll Angle' ; 'pb/2V' ; 'rb/2v' ; 'Lateral Acceleration'};
 Variance_Function = [ var(Y(:,1:4))' ; var(Ay) ];
 Variance_Analytical = [trapz(df,S_Y(1:end,1));trapz(df,S_Y(1:end,2));trapz(df,S_Y(1:end,3));trapz(df,S_Y(1:end,4));trapz(df,S_Ay(1:end))];
 Variance_Lyapunov = lyap(A2,B(:,end-1:end)*B(:,end-1:end)');
