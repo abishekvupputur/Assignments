@@ -132,6 +132,6 @@ A2   = A-B(:,1)*K;
 C=eye(size(A,2));
 D=zeros(size(A,2),size(B,2));
 sys2=ss(A2,B,C,D);
-save dumpfile A B sigmaug_V sigmabg sigmaag Lg V b sys C D A2
+save dumpfile A B sigmaug_V sigmabg sigmaag Lg V b sys C D A2 Flag
 clear
 load dumpfile

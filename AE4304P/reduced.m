@@ -100,7 +100,7 @@ bbg1 = sigmabg*sqrt(3*V/Lg);
 bbg2 = (1-2*sqrt(3))*sigmabg*sqrt((V/Lg)^3);
 
 % STATE- AND INPUT MATRICES
-A = [0 0 0   -2*V/b 0    0    0  0   ;
+A = [0 0 0   -2*V/b 0    0    ybg  0  ;
      0  0    2*V/b 0  0    0    0    0   ;
      lb 0    lp    lr lag  0    lbg  0   ;
      nb 0    np    nr nag  0    nbg  0   ;
@@ -153,6 +153,6 @@ A2   = A-B(:,1)*K;
 %eig(A2), pause
 sys2=ss(A2,B,C,D);
 
-save dumpfile2 A A1 A2 B sigmaug_V sigmabg sigmaag Lg V b sys sys1 sys2 C D
+save dumpfile2 A A1 A2 B sigmaug_V sigmabg sigmaag Lg V b sys sys1 sys2 C D Flag
 clear
 load dumpfile2

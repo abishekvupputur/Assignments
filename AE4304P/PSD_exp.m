@@ -1,4 +1,4 @@
-function S= PSD_exp(x)
+function S= PSD_exp(x,flag)
 Fs=100;
 dt=1/Fs;
 figure;
@@ -8,7 +8,11 @@ Nomega = 2000;
 w_a = logspace(-2,2,Nomega);
 D=zeros(1,5);
 input_nr=1;
-load dumpfile
+if flag ==0
+    load dumpfile
+else
+    load dumpfile2
+end
 if size(x,2)==1
     N = length(x);
     xdft = dt*fft(x);
@@ -29,8 +33,10 @@ if size(x,2)==1
     C(2,4) = 8.9671;
     C  =  [ V  V ]*C;
     D  =  B(1,:);
-    tmp=bode(A2,B,C,D,5,freq);
+    tmp=bode(A2,B,C,D,size(D,2),freq);
     S=tmp.*tmp;
+    tmp=bode(A2,B,C,D,size(D,2)-1,freq);
+    S=S+tmp.*tmp;
     loglog(freq,S)
     legend('Periodogram','Pwelch','Analytical');
     title('Power Spectral Density Ay');
@@ -67,8 +73,10 @@ else
         hold on;
         C=eye(size(A2,1));
         D=zeros(size(A2,1),size(B,2));
-        tmp=bode(A2,B,C(i,:),D(i,:),5,freq);
+        tmp=bode(A2,B,C(i,:),D(i,:),size(D,2),freq);
         S(:,i)=tmp.*tmp;
+        tmp=bode(A2,B,C(i,:),D(i,:),size(D,2)-1,freq);
+        S(:,i)=S(:,i)+tmp.*tmp;
         loglog(freq,S(:,i))
         legend('Periodogram','Pwelch','Analytical');
         hold off
