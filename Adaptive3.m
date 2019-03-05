@@ -75,10 +75,12 @@ eqn2 = 0.75*x + y +51.5*z == -32.5;
 eqn3 = 2.5*x + 1.5*y + 75*z == 50;
 [A,B] = equationsToMatrix([eqn1, eqn2, eqn3], [x, y, z]);
 X = double(linsolve(A,B));
+c_0=1;
 A=[-50,0;0,-50;];
 B=[1,0,0;0,1,0];
 C=[X(2),X(1)];
-D=[X(3),0,1];
+D=[X(3),0,c_0];
+
 sim("Ass3Q2_2");
     figure;
     subplot(2,1,1);
@@ -95,4 +97,21 @@ sim("Ass3Q2_2");
     grid on
     xlabel('time [s]');
     ylabel('Error');
-    
+    %% Full state feedback
+    sim("Ass3Q2_3");
+    figure;
+    subplot(2,1,1)
+    sz=size(Q2_adaptive.time);
+    plot(Q2_adaptive.time, reshape(Q2_adaptive.signals(1).values,sz), Q2_adaptive.time, reshape(Q2_adaptive.signals(2).values,sz));
+    grid on
+    legend('Reference Model','Adaptive Model');
+    xlabel('time [s]');
+    ylabel('Amplitude');
+    title('Question 2 Adaptive- State Feedback');
+    subplot(2,1,2)
+    sz=size(ErrorQ2_3.time);
+    plot(ErrorQ2_3.time, reshape(ErrorQ2_3.signals.values,sz));
+    grid on
+    xlabel('time [s]');
+    ylabel('Error');
+%% Output feedback
