@@ -11,7 +11,7 @@ B=[1,0,0;0,1,0];
 C=[-2,-4];
 D=[3,0,-1.5];
 sim("Ass3.slx");
-sim("Ass3_2.slx");
+sim("Ass3_2_2.slx");
 figure;
     subplot(2,1,1)
     sz=size(Q1_adaptive.time);
@@ -50,7 +50,7 @@ figure;
 K=-ss_mo.a+ss_pl.a;
 K=K(1,:);
 l=50/1.5;
-flag =0; %Set as 0 for sine, 1 for step.
+flag =1; %Set as 0 for sine, 1 for step.
 sim("Ass3Q2_1");
     figure;
     subplot(2,1,1);
@@ -115,3 +115,19 @@ sim("Ass3Q2_2");
     xlabel('time [s]');
     ylabel('Error');
 %% Output feedback
+sim("Ass3Q2_4");
+    figure;
+    subplot(2,1,1);
+    sz=size(Q2_2_opf.time);
+    plot(Q2_2_opf.time, reshape(Q2_2_opf.signals(1).values,sz), Q2_2_opf.time, reshape(Q2_2_opf.signals(2).values,sz));
+    grid on
+    legend('Reference Model','Plant with Calculated feedback Parameters');
+    xlabel('time [s]');
+    ylabel('Amplitude');
+    title('Question 2 Output feedback');
+    subplot(2,1,2)
+    sz=size(ErrorQ2_2.time);
+    plot(ErrorQ2_2.time, reshape(ErrorQ2_2.signals.values,sz));
+    grid on
+    xlabel('time [s]');
+    ylabel('Error');

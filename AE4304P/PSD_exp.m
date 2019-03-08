@@ -32,7 +32,7 @@ if size(x,2)==1
     C  =  [ Cd ; zeros(size(Cd)) ];
     C(2,4) = 8.9671;
     C  =  [ V  V ]*C;
-    D  =  B(1,:);
+    D  =  [V V]*[B(1,:);B(4,:)];
     tmp=bode(A2,B,C,D,size(D,2),freq);
     S=tmp.*tmp;
     tmp=bode(A2,B,C,D,size(D,2)-1,freq);

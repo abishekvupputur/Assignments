@@ -6,9 +6,8 @@
 % A lot of the code used in this assignment was adopted from the lecture
 % notes of the course AE4304. 
 %%
-clc; clear all; close all;
-
-Flag =1; %0 for Full model and 1 for reduced!
+clc; clear all;
+Flag =0; %0 for Full model and 1 for reduced!
 
 if Flag==0
     AircraftModel %Loads Full Aircraft Model.
@@ -79,7 +78,7 @@ Cd =  A2(1,:);                  %First row of A matrix
 C  =  [ Cd ; zeros(size(Cd)) ]; 
 C(2,4) = 2*V/b;                 %Yaw rate Extraction
 C  =  [ V  V ]*C; %Extract The new C matrix with multiplying with V factors.
-D  =  B(1,:);
+D  =  [V V]*[B(1,:);B(4,:)];
 sys_ay  =   ss(A2,B,C,D);
 Ay = lsim(sys_ay,u,t);
 figure;
@@ -102,6 +101,6 @@ Variance_Function = [ var(Y(:,1:4))' ; var(Ay) ];
 Variance_Analytical = [trapz(df,S_Y(1:end,1));trapz(df,S_Y(1:end,2));trapz(df,S_Y(1:end,3));trapz(df,S_Y(1:end,4));trapz(df,S_Ay(1:end))];
 Variance_Lyapunov = lyap(A2,B(:,end-1:end)*B(:,end-1:end)');
 Variance_Lyapunov = diag(Variance_Lyapunov);
-Variance_Lyapunov = [Variance_Lyapunov(1:4); ((C.*C)*Variance_Lyapunov)];
+Variance_Lyapunov = [Variance_Lyapunov(1:4); C*lyap(A2,B(:,end-1:end)*B(:,end-1:end)')*C'];
 Table = table(Names_of_States,Variance_Function,Variance_Analytical,Variance_Lyapunov);
 disp(Table);
