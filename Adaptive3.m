@@ -100,20 +100,20 @@ sim("Ass3Q2_2");
     %% Full state feedback
     sim("Ass3Q2_3");
     figure;
+    P=lyap(ss_mo.a',(ss_mo.b*ss_mo.b')');
     subplot(2,1,1)
     sz=size(Q2_adaptive.time);
-    plot(Q2_adaptive.time, reshape(Q2_adaptive.signals(1).values,sz), Q2_adaptive.time, reshape(Q2_adaptive.signals(2).values,sz));
+    plot(Q2_adaptive.time, reshape(ErrorQ2_3.signals.values(1,1,:),sz));
     grid on
-    legend('Reference Model','Adaptive Model');
     xlabel('time [s]');
-    ylabel('Amplitude');
+    ylabel('[1] State Error');
     title('Question 2 Adaptive- State Feedback');
     subplot(2,1,2)
     sz=size(ErrorQ2_3.time);
-    plot(ErrorQ2_3.time, reshape(ErrorQ2_3.signals.values,sz));
+    plot(ErrorQ2_3.time, reshape(ErrorQ2_3.signals.values(2,1,:),sz));
     grid on
     xlabel('time [s]');
-    ylabel('Error');
+    ylabel('[2] State Error');
 %% Output feedback
 sim("Ass3Q2_4");
     figure;
